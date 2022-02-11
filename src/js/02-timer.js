@@ -16,12 +16,12 @@ function convertMs(ms) {
 
   return { days, hours, minutes, seconds };
 }
-// const refs = {
-//   days: document.querySelector('[data-days]'),
-//   hours: document.querySelector('[data-hours]'),
-//   minutes: document.querySelector('[data-minutes]'),
-//   seconds: document.querySelector('[data-seconds]'),
-// };
+const refs = {
+  days: document.querySelector('[data-days]'),
+  hours: document.querySelector('[data-hours]'),
+  minutes: document.querySelector('[data-minutes]'),
+  seconds: document.querySelector('[data-seconds]'),
+};
 
 let userDate = null;
 
@@ -32,7 +32,7 @@ const options = {
   minuteIncrement: 1,
   onClose(selectedDates) {
     console.log(selectedDates[0]);
-    userDate = selectedDates[0].getTime();
+    userDate = selectedDates[0] /*.getTime()*/;
     if (Date.now() > userDate) {
       alert('Please choose a date in the future');
       btnStartRef.setAttribute('disabled', 'disable');
@@ -45,15 +45,21 @@ const options = {
 
 //---
 const padNum = num => String(num).padStart(2, 0);
+// const month = padNum(currDate.getMonth() + 1);
 
-const onTimer = () => {
-  let intervalId = null;
-  intervalId = setInterval(() => {
-    const currentDate = Date.now();
+const onButton = () => {
+  const onTimer = setInterval(() => {
+    const currentDate = new Date();
     const diff = userDate - currentDate;
-    console.log(intervalId);
+
+    const { days, hours, minutes, seconds } = convertMs(diff);
+    refs.days.textContent = `${padNum(days)} days`;
+    refs.hours.textContent = ` ${padNum(hours)} hours`;
+    refs.minutes.textContent = `${padNum(minutes)}`;
+    refs.seconds.textContent = ` ${padNum(seconds)}`;
+    onTimer();
   }, 1000);
 };
 
 flatpickr('#datetime-picker', options);
-btnStartRef.addEventListener('click', onTimer);
+btnStartRef.addEventListener('click', onButton);
