@@ -1,3 +1,4 @@
+import Notiflix from 'notiflix';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -34,7 +35,8 @@ const options = {
     console.log(selectedDates[0]);
     userDate = selectedDates[0] /*.getTime()*/;
     if (Date.now() > userDate) {
-      alert('Please choose a date in the future');
+      Notiflix.Report.failure('Please choose a date in the future');
+
       btnStartRef.setAttribute('disabled', 'disable');
       return;
     }
@@ -51,10 +53,12 @@ const onButton = () => {
   const onTimer = setInterval(() => {
     const currentDate = new Date();
     const diff = userDate - currentDate;
-
+    if (diff <= 0) {
+      return clearInterval(onTimer);
+    }
     const { days, hours, minutes, seconds } = convertMs(diff);
-    refs.days.textContent = `${padNum(days)} days`;
-    refs.hours.textContent = ` ${padNum(hours)} hours`;
+    refs.days.textContent = `${padNum(days)}`;
+    refs.hours.textContent = ` ${padNum(hours)}`;
     refs.minutes.textContent = `${padNum(minutes)}`;
     refs.seconds.textContent = ` ${padNum(seconds)}`;
     onTimer();
