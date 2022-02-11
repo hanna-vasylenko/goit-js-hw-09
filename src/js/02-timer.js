@@ -33,17 +33,16 @@ const options = {
   onClose(selectedDates) {
     console.log(selectedDates[0]);
     userDate = selectedDates[0].getTime();
-    if (userDate < Date.now()) {
+    if (Date.now() > userDate) {
       alert('Please choose a date in the future');
       btnStartRef.setAttribute('disabled', 'disable');
       return;
     }
     //Eсли пользователь выбрал дату в прошлом, покажи window.alert() с текстом "Please choose a date in the future".
-    startBtn.removeAttribute('disabled');
+    btnStartRef.removeAttribute('disabled');
   },
 };
 
-const fp = new flatpickr('#datetime-picker', options);
 //---
 const padNum = num => String(num).padStart(2, 0);
 
@@ -55,4 +54,6 @@ const onTimer = () => {
     console.log(intervalId);
   }, 1000);
 };
+
+flatpickr('#datetime-picker', options);
 btnStartRef.addEventListener('click', onTimer);
